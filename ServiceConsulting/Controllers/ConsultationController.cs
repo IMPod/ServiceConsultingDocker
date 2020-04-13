@@ -67,6 +67,20 @@ namespace ServiceConsulting.Controllers
             return View(obj);
         }
 
+        public IActionResult Details(long? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            Consultation obj = _consultationRepository.FindByID(id.Value);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+            return View(obj);
+        }
+
         // GET:/Consultation/Delete/1
         public IActionResult Delete(long? id)
         {

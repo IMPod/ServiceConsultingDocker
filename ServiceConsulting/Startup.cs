@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataBase.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ServiceConsulting.Repository;
 
 namespace ServiceConsulting
 {
@@ -24,14 +26,9 @@ namespace ServiceConsulting
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddSingleton<IConfiguration>(Configuration);
-
-            //var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
-            //services.AddDbContext<ApiDbContext>(options =>
-            //    options.UseNpgsql(
-            //        connectionString
-            //    )
-            //);
+            services.AddSingleton(Configuration);
+            services.AddTransient<IRepository<User>, UserRepository>(provider => new UserRepository(Configuration));
+            services.AddTransient<IRepository<Consultation>, ConsultationRepository>(provider => new ConsultationRepository(Configuration));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
